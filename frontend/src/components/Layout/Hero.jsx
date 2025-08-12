@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import pic1 from '../../AR-assets/assets/Third_Pic.jpg';
+import pic1 from '../../AR-assets/assets/Third_pic.jpg';
 import pic2 from '../../AR-assets/assets/Second_pic.jpg';
 import pic3 from '../../AR-assets/assets/Main_pic.jpg';
 import pic4 from '../../AR-assets/assets/6.jpg';
