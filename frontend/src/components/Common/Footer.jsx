@@ -9,7 +9,7 @@ const Footer = ({ openFeedback, openFaqs }) => {
     <footer className='border-t py-12 px-4 sm:px-6 lg:px-0 pb-20 bg-white'>
       <div className='container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8'>
         {/* Newsletter */}
-        <div>
+        <div> 
           <h3 className='text-lg text-gray-800 mb-4'>Newsletter</h3>
           <p className='text-gray-500 mb-4'>
             Be the first to hear about new products, exclusive events and online offers.
