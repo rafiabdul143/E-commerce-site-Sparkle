@@ -30,11 +30,12 @@ Backend: Node.js + Express (coming soon)
 
 Database: MongoDB / SQL (planned)
 
-📂 Project Structure
+Project structure
 sparkle/
 │── frontend/     # Deployed UI codebase
 │── backend/      # To be added soon
 │── README.md
+
 
 📅 Roadmap
 
