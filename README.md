@@ -2,7 +2,7 @@ Welcome to Sparkle! 🚀
 A modern project aiming to deliver powerful features with a clean and intuitive design.
 
 🌐 Live Demo 
-
+ 
 👉 Click here to view Sparkle Frontend
 
 https://sparkle-shopping.vercel.app/
