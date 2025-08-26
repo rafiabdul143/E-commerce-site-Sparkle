@@ -3,7 +3,7 @@ A modern project aiming to deliver powerful features with a clean and intuitive 
 
 🌐 Live Demo 
  
-👉 Click here to view Sparkle Frontend
+👉 Click here to view Sparkle Frontend 
 
 https://sparkle-shopping.vercel.app/
 
