@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparkle.API", "Sparkle.API\Sparkle.API.csproj", "{0636C87D-1AB1-461A-91C2-BDA23C989C11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparkle.Domain", "Sparkle.Domain\Sparkle.Domain.csproj", "{6939744E-2B77-4527-98D1-EF4902F33E32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparkle.Application", "Sparkle.Application\Sparkle.Application.csproj", "{5920AE19-846B-420A-AC9F-26AA6F38E156}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparkle.Infrastructure", "Sparkle.Infrastructure\Sparkle.Infrastructure.csproj", "{923520AF-C2C3-41E1-8EA1-F8060907F5B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0636C87D-1AB1-461A-91C2-BDA23C989C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0636C87D-1AB1-461A-91C2-BDA23C989C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0636C87D-1AB1-461A-91C2-BDA23C989C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0636C87D-1AB1-461A-91C2-BDA23C989C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6939744E-2B77-4527-98D1-EF4902F33E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6939744E-2B77-4527-98D1-EF4902F33E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6939744E-2B77-4527-98D1-EF4902F33E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6939744E-2B77-4527-98D1-EF4902F33E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5920AE19-846B-420A-AC9F-26AA6F38E156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5920AE19-846B-420A-AC9F-26AA6F38E156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5920AE19-846B-420A-AC9F-26AA6F38E156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5920AE19-846B-420A-AC9F-26AA6F38E156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{923520AF-C2C3-41E1-8EA1-F8060907F5B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{923520AF-C2C3-41E1-8EA1-F8060907F5B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{923520AF-C2C3-41E1-8EA1-F8060907F5B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{923520AF-C2C3-41E1-8EA1-F8060907F5B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

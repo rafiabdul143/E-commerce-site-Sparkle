@@ -1,0 +1,6 @@
+@Sparkle.API_HostAddress = http://localhost:5078
+
+GET {{Sparkle.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
