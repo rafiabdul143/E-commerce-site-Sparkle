@@ -1,241 +1,46 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { createOrderApi } from '../../services/api';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
-import { useNavigate } from 'react-router-dom';
-import Paypalbutton from './Paypalbutton';
-import React, { useState, useEffect } from 'react';
-
-
-const cart = {
-  products: [
-    { _id: "1", name: "Stylish Jacket", price: 1500, image: { url: "https://picsum.photos/536/354?random=1", altText: "Stylish Jacket" } },
-    { _id: "2", name: "Elegant Coat", price: 1800, image: { url: "https://picsum.photos/536/354?random=2", altText: "Elegant Coat" } },
-  ],
-  totalPrice: 4500,
-};
+const emptyAddress = { firstName: '', lastName: '', address: '', city: '', postalCode: '', country: '', phone: '' };
 
 const Checkout = () => {
+  const { items, subtotal, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [checkoutId, setCheckoutId] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
-  const shippingCharge = 10;
+  const [address, setAddress] = useState(emptyAddress);
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const shipping = items.length ? 10 : 0;
 
-
-  const [shippingAddress, setShippingAddress] = useState({
-    firstName: "",
-    lastName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    country: "",
-    phone: ""
-  });
-
-  const [couponCode, setCouponCode] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [couponApplied, setCouponApplied] = useState(false);
-
-  const handleApplyCoupon = () => {
-    if (couponCode.trim().toLowerCase() === 'save10') {
-      setDiscount(cart.totalPrice * 0.1);
-      setCouponApplied(true);
-    } else {
-      setDiscount(0);
-      setCouponApplied(false);
-      alert('Invalid coupon code');
-    }
-  };
-  useEffect(() => {
-  if (submitted) {
-    const timer = setTimeout(() => {
-      setSubmitted(false);
-    }, 5000); // Hide after 5 seconds
-
-    return () => clearTimeout(timer); // Cleanup if unmounted
-  }
-}, [submitted]);
-
-
-  const handleCreateCheckout = (e) => {
-    e.preventDefault();
-    const isValid = Object.values(shippingAddress).every((val) => val.trim() !== '');
-    if (!isValid) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    setCheckoutId(143); // Simulate backend ID
-    setSubmitted(true);
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!isAuthenticated) return navigate('/login');
+    if (!items.length) return setError('Your cart is empty.');
+    setSubmitting(true); setError('');
+    try {
+      const result = await createOrderApi({ items: items.map(({ productId, quantity, size, color }) => ({ productId, quantity, size, color })), shippingAddress: address, paymentMethod: 'COD' });
+      clearCart();
+      navigate('/order-confirmation', { state: { order: result.order } });
+    } catch (requestError) { setError(requestError.message || 'We could not place your order. Please try again.'); }
+    finally { setSubmitting(false); }
   };
 
-  const handlePaymentSuccess = () => {
-    console.log("Payment Successful");
-    navigate("/order-confirmation");
-  };
+  if (!items.length) return <main className="mx-auto max-w-3xl px-4 py-20 text-center"><h1 className="text-2xl font-semibold">Your cart is empty</h1><Link className="mt-6 inline-block rounded bg-gray-900 px-5 py-3 text-white" to="/collections/all">Continue shopping</Link></main>;
 
-
-
-
-  return (
-    <div className="max-w-6xl mx-auto  grid grid-cols-1 lg:grid-cols-2 p-6 lg:p-12 grid grid-cols-1 lg:grid-cols-2 gap-8 tracking-tight">
-      {/* Left - Shipping Form */}
-      <div className="order-1 lg:order-1">
-        <div className="bg-white shadow-md rounded-xl p-8 border border-gray-200">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6">Checkout</h2>
-{submitted && (
-  <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm transition-opacity duration-500 ease-in-out">
-    Shipping details submitted successfully!
-  </div>
-)}
-
-
-          <form onSubmit={handleCreateCheckout} className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-4">Shipping Address</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  ['First Name', 'firstName'],
-                  ['Last Name', 'lastName'],
-                  ['Address', 'address', true],
-                  ['City', 'city'],
-                  ['Postal Code', 'postalCode'],
-                  ['Country', 'country'],
-                  ['Phone Number', 'phone']
-                ].map(([label, field, full]) => (
-                  <div key={field} className={full ? 'md:col-span-2' : ''}>
-                    <label className="block mb-1 text-gray-600">{label}</label>
-                    <input
-                      type={field === 'postalCode' || field === 'phone' ? 'tel' : 'text'}
-                      value={shippingAddress[field]}
-                      onChange={(e) =>
-                        setShippingAddress({ ...shippingAddress, [field]: e.target.value })
-                      }
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full bg-gray-800 hover:bg-black text-white py-3 rounded font-semibold transition"
-              >
-                Continue to Payment
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      {/* Right - Order Summary */}
-      <div className="order-2 lg:order-2">
-        <div className="bg-gray-50 rounded-xl shadow-inner p-8 border border-gray-200 max-h-[600px] overflow-y-auto">
-          <h3 className="text-2xl font-semibold mb-6 text-gray-800">Order Summary</h3>
-          <ul className="divide-y divide-gray-300 mb-6">
-            {cart.products.map((item) => (
-             <ul className="divide-y divide-gray-300 mb-6">
-  {cart.products.map((item) => (
-    <li key={item._id} className="flex flex-col gap-2 py-4">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <img
-            src={item.image.url}
-            alt={item.image.altText || item.name}
-            className="w-14 h-14 object-cover rounded-md border"
-          />
-          <div>
-            <p className="font-medium text-gray-700">{item.name}</p>
-            <p className="text-sm text-gray-500">Size: {item.size}</p>
-            <p className="text-sm text-gray-500">Color: {item.color}</p>
-          </div>
-        </div>
-        <span className="text-gray-800 font-semibold">₹{item.price}</span>
-      </div>
-    </li>
-  ))}
-</ul>
-
-            ))}
-          </ul>
-
-          {/* Coupon */}
-          <div className="mb-4">
-            <label htmlFor="coupon" className="block text-sm font-medium text-gray-700 mb-1">
-              Have a coupon?
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                id="coupon"
-                type="text"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm"
-                placeholder="Enter coupon code"
-              />
-              <button
-                onClick={handleApplyCoupon}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
-              >
-                Apply
-              </button>
-            </div>
-            {couponApplied && (
-              <p className="text-green-600 text-sm mt-1">
-                Coupon applied! You saved ${discount.toFixed(2)}
-              </p>
-            )}
-          </div>
-
-          {/* Price Breakdown */}
-          <div className="space-y-2 border-t pt-4 text-gray-900 text-sm font-medium">
-  <div className="flex justify-between">
-    <span>Subtotal</span>
-    <span>₹{cart.totalPrice.toFixed(2)}</span>
-  </div>
-  <div className="flex justify-between text-green-700">
-    <span>Discount</span>
-    <span>- ₹{discount.toFixed(2)}</span>
-  </div>
-  <div className="flex justify-between text-blue-700">
-    <span>Shipping</span>
-    <span>₹{shippingCharge.toFixed(2)}</span>
-  </div>
-  <div className="flex justify-between text-lg font-semibold border-t pt-2">
-    <span>Total</span>
-    <span>
-      ₹{(cart.totalPrice - discount + shippingCharge).toFixed(2)}
-    </span>
-  </div>
-</div>
-
-        </div>
-
-        <div className="mt-6 text-center text-sm text-gray-600 bg-blue-50 p-4 rounded-md border border-blue-200">
-          Please ensure all shipping details are entered accurately to avoid any delays and to ensure a smooth and timely delivery.
-        </div>
-        <button
-  onClick={handlePaymentSuccess}
-  className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm"
->
-  🔧 Dev: Skip Payment & Confirm Order
-</button>
-
-
-        {/* PayPal Button */}
-        {checkoutId && (
-          <div className="mt-6">
-            <h3 className="text-lg font-medium text-gray-700 mb-4">Pay with PayPal</h3>
-            <Paypalbutton
-              amount={(cart.totalPrice - discount).toFixed(2)}
-              onSuccess={handlePaymentSuccess}
-              onError={() => alert("Payment Failed, Try Again.")}
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return <main className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[1.2fr_.8fr] lg:px-8">
+    <form onSubmit={submit} className="rounded-xl border bg-white p-5 shadow-sm sm:p-8"><h1 className="mb-6 text-2xl font-semibold">Checkout</h1>
+      {error && <p role="alert" className="mb-5 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+      <fieldset className="grid gap-4 sm:grid-cols-2"><legend className="mb-2 text-lg font-medium">Shipping address</legend>
+        {Object.entries({ firstName: 'First name', lastName: 'Last name', address: 'Street address', city: 'City', postalCode: 'Postal code', country: 'Country', phone: 'Phone' }).map(([key, label]) => <label key={key} className={key === 'address' ? 'sm:col-span-2' : ''}><span className="mb-1 block text-sm font-medium">{label}</span><input required type={key === 'phone' || key === 'postalCode' ? 'tel' : 'text'} value={address[key]} onChange={(e) => setAddress((current) => ({ ...current, [key]: e.target.value }))} className="w-full rounded border border-gray-300 px-3 py-2.5 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100" /></label>)}
+      </fieldset>
+      <button disabled={submitting} className="mt-8 w-full rounded bg-gray-900 py-3 font-semibold text-white hover:bg-black disabled:opacity-50">{submitting ? 'Placing order…' : isAuthenticated ? 'Place order' : 'Sign in to place order'}</button>
+      <p className="mt-3 text-xs text-gray-500">Orders are priced and stock-checked again by the server before creation.</p>
+    </form>
+    <aside className="h-fit rounded-xl border bg-gray-50 p-5 sm:p-8"><h2 className="text-xl font-semibold">Order summary</h2><div className="mt-5 divide-y">{items.map((item) => <div key={item.id} className="flex gap-3 py-4"><img src={item.image || '/placeholder.jpg'} alt="" className="h-14 w-12 rounded object-cover" /><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.name}</p><p className="text-sm text-gray-600">Qty {item.quantity}</p></div><span>₹{(item.price * item.quantity).toFixed(2)}</span></div>)}</div><dl className="mt-4 space-y-2 border-t pt-4 text-sm"><div className="flex justify-between"><dt>Subtotal</dt><dd>₹{subtotal.toFixed(2)}</dd></div><div className="flex justify-between"><dt>Shipping</dt><dd>₹{shipping.toFixed(2)}</dd></div><div className="flex justify-between pt-2 text-base font-semibold"><dt>Total</dt><dd>₹{(subtotal + shipping).toFixed(2)}</dd></div></dl></aside>
+  </main>;
 };
 
 export default Checkout;

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'sonner';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 /* ---------- User Pages ---------- */
 import UserLayout from './components/Layout/UserLayout';
@@ -16,6 +17,8 @@ import Checkout from './components/Cart/Checkout';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import OrderDetails from './pages/OrderDetails';
 import MyordersPage from './pages/MyordersPage';
+import WishlistPage from './pages/WishlistPage';
+import AddressBookPage from './pages/AddressBookPage';
 import PhoneOTP from './pages/PhoneOTP';
 
 /* ---------- Admin Pages ---------- */
@@ -36,6 +39,7 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => (
   <AuthProvider>
+    <CartProvider>
     <Router>
       <Toaster position="top-right" />
 
@@ -52,11 +56,28 @@ const App = () => (
           <Route path="order/:id" element={<OrderDetails />} />
           <Route path="my-orders" element={<MyordersPage />} />
           <Route path="phone-login" element={<PhoneOTP />} />
+          
           <Route
             path="profile"
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="wishlist"
+            element={
+              <ProtectedRoute>
+                <WishlistPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="addresses"
+            element={
+              <ProtectedRoute>
+                <AddressBookPage />
               </ProtectedRoute>
             }
           />
@@ -78,6 +99,7 @@ const App = () => (
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
+    </CartProvider>
   </AuthProvider>
 );
 

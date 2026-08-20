@@ -4,6 +4,7 @@ import Footer from '../Common/Footer';
 import { Outlet } from 'react-router-dom';
 import FeedbackForm from '../feedbackForm';
 import FAQs from '../Faqs';
+import AiBotWidget from '../AiBotWidget';
 
 const UserLayout = () => {
   const [openFeedback, setOpenFeedback] = useState(false);
@@ -24,6 +25,9 @@ const UserLayout = () => {
       <main>
         <Outlet />
       </main>
+
+      {/* Floating AI Shopping Assistant Bot */}
+      <AiBotWidget />
 
       {/* Footer receives both handlers */}
       <Footer 

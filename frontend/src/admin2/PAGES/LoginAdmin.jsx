@@ -19,7 +19,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 
 
 
-const LoginAdmin = ({ onSwitchToRegister }) => {
+const LoginAdmin = () => {
 const [formData, setFormData] = useState({
   email: 'admin@sparkle.com',
   password: 'Admin@123',
@@ -44,14 +44,11 @@ const navigate = useNavigate();
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (!validateForm()) return;
-  const ok = await login(formData.email.trim().toLowerCase(), formData.password.trim());
-  console.log('Login result:', ok);
-  if (ok) {
-    console.log('Navigating to dashboard...');
+  const result = await login(formData.email.trim().toLowerCase(), formData.password.trim());
+  if (result?.success) {
     navigate('/admin'); // or '/admin' based on your route
   } else {
-    console.log('Login failed');
-    setErrors((p) => ({ ...p, password: 'Invalid email or password' }));
+    setErrors((p) => ({ ...p, password: result?.message || 'Invalid email or password' }));
   }
 };
 

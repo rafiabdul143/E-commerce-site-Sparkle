@@ -44,14 +44,14 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      const success = await register(name, email, password);
-      if (success) {
+      const res = await register(name, email, password);
+      if (res && res.success) {
         navigate('/profile');
       } else {
-        setError('Registration failed. User may already exist.');
+        setError(res?.message || 'Registration failed. User may already exist.');
       }
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

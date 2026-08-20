@@ -20,7 +20,7 @@ const GenderCollection = () => {
             <h2 className='text-2xl font-bold text-gray-900 mb-3'>
               Women's Collection
             </h2>
-            <Link to="/collections/all?gender=women" className='text-gray-900 underline'>
+            <Link to="/collections/women" className='text-gray-900 underline'>
               Shop now
             </Link>
           </div>
@@ -37,7 +37,7 @@ const GenderCollection = () => {
             <h2 className='text-2xl font-bold text-gray-900 mb-3'>
               Men's Collection
             </h2>
-            <Link to="/collections/all?gender=men" className='text-gray-900 underline'>
+            <Link to="/collections/men" className='text-gray-900 underline'>
               Shop now
             </Link>
           </div>
@@ -53,7 +53,7 @@ const GenderCollection = () => {
             <h2 className='text-2xl font-bold text-gray-900 mb-3'>
               Kids's Collection
             </h2>
-            <Link to="/collections/all?gender=men" className='text-gray-900 underline'>
+            <Link to="/collections/children" className='text-gray-900 underline'>
               Shop now
             </Link>
           </div>
@@ -66,7 +66,7 @@ const GenderCollection = () => {
 };
 
 export default GenderCollection;
-const newArrivals = [
+const _newArrivals = [
     {
       _id: "1",
       name: "Stylish Jacket",

@@ -8,12 +8,13 @@ import { IoMdClose } from 'react-icons/io';
 import CollectionsPage from '../../pages/CollectionsPage';
 import { MdAdminPanelSettings } from "react-icons/md";
 import { Sparkles } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
 
 
 
 
 const Navbar = () => {
-  const cartCount = "2"; 
+  const { count: cartCount } = useCart();
  
     const [drawerOpen, setDrawerOpen] = useState(false);
     const[navDrawerOpen,setNavDrawerOpen]=useState(false);
@@ -42,11 +43,10 @@ const Navbar = () => {
 
       {/* Menu */}
       <div className="hidden md:flex space-x-6">
-        <Link to="/collections/all" className="text-gray-800 hover:text-red-800 transition duration-300">Men</Link>
-        <Link to="#" className="text-gray-800 hover:text-red-700 transition duration-300">Woman</Link>
-        <Link to="#" className="text-gray-800 hover:text-red-700 transition duration-300">Top Wear</Link>
-        <Link to="#" className="text-gray-800 hover:text-red-700 transition duration-300">Bottom Wear</Link>
-        <Link to="#" className="text-gray-800 hover:text-red-700 transition duration-300">Kids Wear</Link>
+        <Link to="/collections/all" className="text-gray-800 hover:text-red-800 transition duration-300">All</Link>
+        <Link to="/collections/men" className="text-gray-800 hover:text-red-800 transition duration-300">Men</Link>
+        <Link to="/collections/women" className="text-gray-800 hover:text-red-700 transition duration-300">Women</Link>
+        <Link to="/collections/children" className="text-gray-800 hover:text-red-700 transition duration-300">Children</Link>
       </div>
 
       {/* Right Icons */}
@@ -107,11 +107,10 @@ const Navbar = () => {
     <div className='p-4'>
       <h2 className='text-xl font-semibold mb-4'>Menu</h2>
       <nav className='space-y-4'>
-        <Link to="#" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Men</Link>
-        <Link to="#" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Women</Link>
-        <Link to="#" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Top Wear</Link>
-        <Link to="#" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Bottom Wear</Link>
-        <Link to="#" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Kids Wear</Link>
+        <Link to="/collections/all" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>All products</Link>
+        <Link to="/collections/men" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Men</Link>
+        <Link to="/collections/women" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Women</Link>
+        <Link to="/collections/children" onClick={toggleNavDrawer} className='block text-gray-600 hover:text-black'>Children</Link>
       </nav>
     </div>
   </div>

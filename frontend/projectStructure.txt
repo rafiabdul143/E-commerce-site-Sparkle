@@ -1,0 +1,149 @@
+Folder PATH listing
+Volume serial number is 000000E6 3CEE:5D0E
+C:.
+¦   .gitignore
+¦   eslint.config.js
+¦   index.html
+¦   package.json
+¦   postcss.config.js
+¦   projectStructure.txt
+¦   README.md
+¦   structure.txt
+¦   tailwind.config.js
+¦   vercel.json
+¦   vite.config.js
+¦   
++---public
+¦       apna logo.jpg
+¦       test2.jpg
+¦       th (1).jpg
+¦       vite.svg
+¦       
++---src
+    ¦   App.jsx
+    ¦   index.css
+    ¦   main.jsx
+    ¦   
+    +---admin2
+    ¦   ¦   AdminLayout.jsx
+    ¦   ¦   Sidebar.jsx
+    ¦   ¦   Topbaradmin.jsx
+    ¦   ¦   
+    ¦   +---PAGES
+    ¦           Dashboard.jsx
+    ¦           LoginAdmin.jsx
+    ¦           Orders.jsx
+    ¦           Products.jsx
+    ¦           RegisterAdmin.jsx
+    ¦           Settings.jsx
+    ¦           Users.jsx
+    ¦           
+    +---AR-assets
+    ¦   +---assets
+    ¦   ¦       4.jpg
+    ¦   ¦       5.jpg
+    ¦   ¦       6.jpg
+    ¦   ¦       7.jpg
+    ¦   ¦       b.jpg
+    ¦   ¦       C.jpg
+    ¦   ¦       E.jpg
+    ¦   ¦       featured.webp
+    ¦   ¦       featured1.jpg
+    ¦   ¦       featured2.jpg
+    ¦   ¦       fifth.jpg
+    ¦   ¦       fourth.jpg
+    ¦   ¦       gentleman_pic.jpg
+    ¦   ¦       I.jpg
+    ¦   ¦       kh1.jpg
+    ¦   ¦       kid.jpg
+    ¦   ¦       kids.jpg
+    ¦   ¦       L1.jpg
+    ¦   ¦       L2.jpg
+    ¦   ¦       L3.jpg
+    ¦   ¦       L5.jpg
+    ¦   ¦       L6.jpg
+    ¦   ¦       L7.jpg
+    ¦   ¦       log.jpg
+    ¦   ¦       login.webp
+    ¦   ¦       M.jpg
+    ¦   ¦       Main_pic.jpg
+    ¦   ¦       mens-collection.webp
+    ¦   ¦       O.jpg
+    ¦   ¦       rabbit-hero.webp
+    ¦   ¦       react.svg
+    ¦   ¦       register.webp
+    ¦   ¦       S.jpg
+    ¦   ¦       Second_pic.jpg
+    ¦   ¦       T.jpg
+    ¦   ¦       test1.jpg
+    ¦   ¦       testing1.jpg
+    ¦   ¦       testing2.jpg
+    ¦   ¦       testing3.jpg
+    ¦   ¦       testing4.jpg
+    ¦   ¦       testing5.jpg
+    ¦   ¦       Third_pic.jpg
+    ¦   ¦       W.jpg
+    ¦   ¦       wa2.jpg
+    ¦   ¦       woman.jpg
+    ¦   ¦       womens-collection.webp
+    ¦   ¦       
+    ¦   +---data
+    ¦           products.js
+    ¦           
+    +---components
+    ¦   ¦   AboutUs.jsx
+    ¦   ¦   Authheader.jsx
+    ¦   ¦   contactUs.jsx
+    ¦   ¦   Faqs.jsx
+    ¦   ¦   Features.jsx
+    ¦   ¦   feedbackForm.jsx
+    ¦   ¦   ProtectedRoute.jsx
+    ¦   ¦   
+    ¦   +---Cart
+    ¦   ¦       Cartcontains.jsx
+    ¦   ¦       Checkout.jsx
+    ¦   ¦       Paypalbutton.jsx
+    ¦   ¦       
+    ¦   +---Common
+    ¦   ¦       Footer.jsx
+    ¦   ¦       Header.jsx
+    ¦   ¦       Navbar.jsx
+    ¦   ¦       Searchbar.jsx
+    ¦   ¦       ThemeToggle.css
+    ¦   ¦       ThemeToggle.jsx
+    ¦   ¦       
+    ¦   +---Layout
+    ¦   ¦       CartDrawer.jsx
+    ¦   ¦       Hero.jsx
+    ¦   ¦       Topbar.jsx
+    ¦   ¦       UserLayout.jsx
+    ¦   ¦       
+    ¦   +---product
+    ¦           FeaturedCollections.jsx
+    ¦           FeaturesSection.jsx
+    ¦           FilterSlidebar.jsx
+    ¦           GenderCollection.jsx
+    ¦           NewArrivals.jsx
+    ¦           ProductDetails.jsx
+    ¦           ProductGrid.jsx
+    ¦           SortOptions.jsx
+    ¦           
+    +---context
+    ¦       AuthContext.jsx
+    ¦       
+    +---firebase
+    ¦       firebase.jsx
+    ¦       
+    +---pages
+            CollectionsPage.jsx
+            Home.jsx
+            ImageCollage.jsx
+            Login.jsx
+            MiniSlider.jsx
+            MyordersPage.jsx
+            OrderConfirmationPage.jsx
+            OrderDetails.jsx
+            PhoneOTP.jsx
+            Profile.jsx
+            Register.jsx
+            

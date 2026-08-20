@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  chatSessions ChatSession[]
+  orders       Order[]
+  reviews      Review[]
+
+  @@map("users")
+}
+
+model Product {
+  id            String           @id @default(uuid())
+  sku           String           @unique
+  name          String
+  description   String
+  price         Float
+  discountPrice Float?
+  countInStock  Int              @default(0)
+  category      String
+  brand         String
+  collections   String?
+  material      String?
+  gender        String
+  rating        Float            @default(0)
+  numReviews    Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  orderItems    OrderItem[]
+  images        ProductImage[]
+  variants      ProductVariant[]
+  reviews       Review[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id           String  @id @default(uuid())
+  productId    String
+  url          String
+  altText      String?
+  displayOrder Int     @default(0)
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id            String  @id @default(uuid())
+  productId     String
+  size          String
+  color         String
+  stockQuantity Int     @default(0)
+  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+}
+
+model Order {
+  id                 String        @id @default(uuid())
+  userId             String
+  orderNumber        String        @unique
+  totalPrice         Float
+  shippingCharge     Float         @default(0)
+  discountAmount     Float         @default(0)
+  couponCode         String?
+  status             OrderStatus   @default(Pending)
+  paymentMethod      PaymentMethod @default(PayPal)
+  paymentStatus      PaymentStatus @default(Pending)
+  paypalOrderId      String?
+  shippingFirstName  String
+  shippingLastName   String
+  shippingAddress    String
+  shippingCity       String
+  shippingPostalCode String
+  shippingCountry    String
+  shippingPhone      String
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  items              OrderItem[]
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  productId   String
+  productName String
+  price       Float
+  quantity    Int
+  size        String?
+  color       String?
+  imageUrl    String?
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  productId String
+  userId    String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Coupon {
+  id                 String    @id @default(uuid())
+  code               String    @unique
+  discountPercentage Float?
+  discountFlat       Float?
+  minOrderAmount     Float     @default(0)
+  isActive           Boolean   @default(true)
+  expiresAt          DateTime?
+  createdAt          DateTime  @default(now())
+
+  @@map("coupons")
+}
+
+model ChatSession {
+  id           String        @id @default(uuid())
+  userId       String?
+  sessionTitle String        @default("Shopping Assistance")
+  createdAt    DateTime      @default(now())
+  messages     ChatMessage[]
+  user         User?         @relation(fields: [userId], references: [id])
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id               String      @id @default(uuid())
+  sessionId        String
+  sender           String
+  content          String
+  functionCallJson String?
+  createdAt        DateTime    @default(now())
+  session          ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  Delivered
+  Cancelled
+  Refunded
+}
+
+enum PaymentMethod {
+  PayPal
+  CreditCard
+  COD
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Failed
+}

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { 
   User, 
   Bell, 
@@ -18,7 +17,6 @@ import {
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -30,11 +28,6 @@ const Settings = () => {
     { id: 'data', label: 'Data', icon: Database },
   ];
 
-  const handleLogout = () => {
-    // Add your logout logic here
-    // For now, just navigate to login or home
-    navigate('/');
-  };
 
   const renderTabContent = () => {
     switch (activeTab) {

@@ -1,79 +1,78 @@
-import React, { createContext, useContext, useState } from 'react';
-
-/* ---------- Demo Users ---------- */
-const sampleUsers = [
-  { id: '1', name: 'John Doe', email: 'john@example.com', password: 'password123' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com', password: 'password456' },
-  { id: '3', name: 'Demo User', email: 'demo@fashion.com', password: 'demo123' }
-];
-
-/* ---------- Admin Credentials ---------- */
-const adminCredentials = {
-  email: 'admin@sparkle.com',
-  password: 'Admin@123',
-  name: 'Admin',
-  id: 'admin'
-};
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { loginApi, registerApi, getMeApi, setAuthToken, getAuthToken } from '../services/api';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  /* ---------- LOGIN (Admin + Regular Users) ---------- */
+  // Re-hydrate session on page refresh if token exists
+  useEffect(() => {
+    const initAuth = async () => {
+      const token = getAuthToken();
+      if (token) {
+        try {
+          const res = await getMeApi();
+          if (res.success && res.user) {
+            setUser(res.user);
+            setIsAuthenticated(true);
+          } else {
+            setAuthToken(null);
+          }
+        } catch (err) {
+          console.error('Failed to restore session:', err);
+          setAuthToken(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    initAuth();
+  }, []);
+
+  /* ---------- LOGIN ---------- */
   const login = async (email, password) => {
-    // ✅ Check for Admin First
-    if (
-      email.trim().toLowerCase() === adminCredentials.email &&
-      password === adminCredentials.password
-    ) {
-      setUser({
-        id: adminCredentials.id,
-        name: adminCredentials.name,
-        email: adminCredentials.email
-      });
-      setIsAuthenticated(true);
-      console.log('✅ Admin logged in');
-      return true;
+    try {
+      const res = await loginApi(email, password);
+      if (res.success && res.token) {
+        setAuthToken(res.token);
+        setUser(res.user);
+        setIsAuthenticated(true);
+        return { success: true };
+      }
+      return { success: false, message: res.message || 'Login failed' };
+    } catch (err) {
+      return { success: false, message: err.message || 'Server error during login' };
     }
-
-    // 🔍 Check in Sample Users
-    const found = sampleUsers.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (found) {
-      setUser({ id: found.id, name: found.name, email: found.email });
-      setIsAuthenticated(true);
-      console.log('✅ User logged in');
-      return true;
-    }
-
-    console.log('❌ Login failed');
-    return false;
   };
 
   /* ---------- REGISTER ---------- */
-  const register = async (name, email, password) => {
-    const exists = sampleUsers.find((u) => u.email === email);
-    if (exists) return false;
-
-    const newUser = { id: Date.now().toString(), name, email };
-    sampleUsers.push({ ...newUser, password });
-    setUser(newUser);
-    setIsAuthenticated(true);
-    return true;
+  const register = async (name, email, password, phone) => {
+    try {
+      const res = await registerApi(name, email, password, phone);
+      if (res.success && res.token) {
+        setAuthToken(res.token);
+        setUser(res.user);
+        setIsAuthenticated(true);
+        return { success: true };
+      }
+      return { success: false, message: res.message || 'Registration failed' };
+    } catch (err) {
+      return { success: false, message: err.message || 'Server error during registration' };
+    }
   };
 
   /* ---------- LOGOUT ---------- */
   const logout = () => {
+    setAuthToken(null);
     setUser(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,50 +1,8 @@
-import React from 'react';
+import { Heart, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const SkeletonCard = () => (
-  <div className="bg-white p-4 rounded-lg shadow animate-pulse flex flex-col">
-    <div className="aspect-[3/4] bg-gray-300 rounded-lg mb-3"></div>
-    <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-  </div>
-);
+const SkeletonCard = () => <div className="overflow-hidden rounded-xl border border-gray-200 bg-white"><div className="aspect-[4/5] animate-pulse bg-gray-100" /><div className="space-y-3 p-4"><div className="h-3 w-1/3 animate-pulse rounded bg-gray-100" /><div className="h-4 animate-pulse rounded bg-gray-100" /><div className="h-4 w-2/5 animate-pulse rounded bg-gray-100" /></div></div>;
 
-const ProductGrid = ({ products = [], isLoading = false }) => {
-  const skeletonCount = 8;
-
-  return (
-    <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2  px-2 lg:ml-[5rem]">
-      {isLoading
-        ? Array.from({ length: skeletonCount }).map((_, index) => (
-            <SkeletonCard key={index} />
-          ))
-        : products.map((product, index) => (
-            <Link
-              key={product._id || index}
-              to={`/product/${product._id}`}
-              className="block h-full"
-            >
-              <div className="bg-white p-4 rounded-xl shadow hover:shadow-lg hover:scale-[1.01] transition-all duration-200 h-full flex flex-col">
-                <div className="aspect-[3/4] w-full mb-3">
-                  <img
-                    src={product?.images?.[0]?.url || '/placeholder.jpg'}
-                    alt={product.name}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-sm sm:text-base font-semibold truncate min-h-[1.5rem]">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600 font-medium text-sm sm:text-base tracking-tight mt-1">
-                    ₹{product.price}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
-    </div>
-  );
-};
+const ProductGrid = ({ products = [], isLoading = false }) => <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">{isLoading ? Array.from({ length: 10 }, (_, index) => <SkeletonCard key={index} />) : products.map((product) => { const price = product.discountPrice ?? product.price; const image = product.images?.[0]?.url || '/placeholder.jpg'; return <article key={product.id || product._id} className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg"><div className="relative aspect-[4/5] overflow-hidden bg-gray-100"><Link to={`/product/${product.id || product._id}`}><img src={image} alt={product.images?.[0]?.altText || product.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /></Link>{product.discountPrice && <span className="absolute left-3 top-3 rounded-full bg-rose-600 px-2 py-1 text-xs font-semibold text-white">Sale</span>}<button type="button" aria-label={`Save ${product.name}`} className="absolute right-3 top-3 rounded-full bg-white/90 p-2 text-gray-700 shadow-sm hover:text-rose-600"><Heart className="h-4 w-4" /></button></div><div className="p-3 sm:p-4"><p className="truncate text-xs font-medium uppercase tracking-wide text-gray-500">{product.brand || product.category}</p><Link to={`/product/${product.id || product._id}`} className="mt-1 block min-h-10 text-sm font-semibold text-gray-900 hover:underline sm:text-base">{product.name}</Link><div className="mt-2 flex items-center gap-1 text-xs text-amber-500"><Star className="h-3.5 w-3.5 fill-current" /><span className="font-medium text-gray-700">{product.rating?.toFixed?.(1) || 'New'}</span>{product.numReviews ? <span className="text-gray-400">({product.numReviews})</span> : null}</div><div className="mt-3 flex items-baseline gap-2"><span className="font-bold text-gray-950">₹{Number(price).toFixed(2)}</span>{product.discountPrice ? <del className="text-xs text-gray-500">₹{Number(product.price).toFixed(2)}</del> : null}</div></div></article>; })}</div>;
 
 export default ProductGrid;

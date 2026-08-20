@@ -34,14 +34,13 @@ const Login = () => {
     setError('');
     setIsLoading(true);
 
-    /* trim / normalise before sending */
-    const ok = await login(email.trim().toLowerCase(), password.trim());
+    const res = await login(email.trim().toLowerCase(), password.trim());
 
     setIsLoading(false);
-    if (ok) {
+    if (res && res.success) {
       navigate('/profile');
     } else {
-      setError('Invalid email or password');
+      setError(res?.message || 'Invalid email or password');
     }
   };
 
